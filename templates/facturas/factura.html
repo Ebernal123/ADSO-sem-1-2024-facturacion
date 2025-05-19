@@ -1,84 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura - FACT-3000</title>
-    <link rel="stylesheet" href="../styles/css/bootstrap.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Factura</title>
+  <!-- Bootstrap 5 CSS desde CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="../index.html">FACT-3000</a>
-    </nav>
-
-    <div class="container mt-4">
-        <h2>Generar Factura</h2>
-        <form id="factura-form"> <!-- Asegurado de que tenga el ID correcto -->
-            <div class="form-group">
-                <label for="numero_factura">Número de Factura</label>
-                <input type="text" class="form-control" id="numero_factura" placeholder="Autogenerado" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="fecha">Fecha de Emisión</label>
-                <input type="date" class="form-control" id="fecha" required>
-            </div>
-
-            <div class="form-group">
-                <label for="cliente">Cliente</label>
-                <select class="form-control" id="cliente" required>
-                    <option value="" selected>Seleccione un cliente</option>
-                    <option value="1">Cliente 1</option>
-                    <option value="2">Cliente 2</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Productos</label>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productos-lista">
-                        <!-- Se agregarán filas dinámicamente -->
-                    </tbody>
-                </table>
-                <button type="button" class="btn btn-secondary" id="agregar-producto">Agregar Producto</button>
-            </div>
-
-            <div class="form-group">
-                <label for="subtotal">Subtotal</label>
-                <input type="text" class="form-control" id="subtotal" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="impuestos">Impuestos (IVA 19%)</label>
-                <input type="text" class="form-control" id="impuestos" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="total">Total a Pagar</label>
-                <input type="text" class="form-control" id="total" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="metodo_pago">Método de Pago</label>
-                <select class="form-control" id="metodo_pago">
-                    <option value="efectivo">Efectivo</option>
-                    <option value="tarjeta">Tarjeta</option>
-                    <option value="transferencia">Transferencia</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Generar Factura</button>
-        </form>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">FACT-3000</a>
     </div>
+  </nav>
 
-    <script src="../../scripts/factura.js"></script>
+  <div class="container mt-5">
+    <h2 class="mb-4">Crear Factura</h2>
+    
+    <form action="/facturas" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="cliente" class="form-label">Cliente</label>
+        <input type="text" class="form-control" id="cliente" name="cliente" placeholder="Ingrese nombre del cliente" required />
+        <div class="invalid-feedback">Por favor ingrese el nombre del cliente.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="producto" class="form-label">Producto</label>
+        <input type="text" class="form-control" id="producto" name="producto" placeholder="Ingrese el producto" required />
+        <div class="invalid-feedback">Por favor ingrese el producto.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad" min="1" required />
+        <div class="invalid-feedback">Por favor ingrese una cantidad válida.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="precio" class="form-label">Precio Unitario</label>
+        <input type="number" step="0.01" class="form-control" id="precio" name="precio" placeholder="Ingrese el precio unitario" min="0" required />
+        <div class="invalid-feedback">Por favor ingrese un precio válido.</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Generar Factura</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Validación con Bootstrap -->
+  <script>
+    (() => {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
 </body>
 </html>
+

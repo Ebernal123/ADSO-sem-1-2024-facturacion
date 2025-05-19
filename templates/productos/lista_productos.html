@@ -1,11 +1,69 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista de Productos - FACT-3000</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      background-color: #f4f6f8;
+    }
+    .container {
+      max-width: 900px;
+      margin-top: 40px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">FACT-3000</a>
+    </div>
+  </nav>
 
-{% block content %}
-<h1>Lista de Productos</h1>
-<ul>
-    <li>Producto 1</li>
-    <li>Producto 2</li>
-    <li>Producto 3</li>
-</ul>
-<a href="/producto/nuevo">Agregar Nuevo Producto</a>
-{% endblock %}
+  <div class="container">
+    <h2>Lista de Productos</h2>
+
+    {% if productos %}
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Especie</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for producto in productos %}
+        <tr>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>${{ "%.2f"|format(producto.precio|float) }}</td>
+          <td>{{ producto.especie }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="text-center fs-5">No hay productos registrados.</p>
+    {% endif %}
+
+    <div class="text-end mt-3">
+      <a href="{{ url_for('nuevo_producto') }}" class="btn btn-success">Agregar Nuevo Producto</a>
+    </div>
+  </div>
+</body>
+</html>
