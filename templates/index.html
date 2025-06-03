@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Bienvenido a la Aplicación Web</h1>
-    <p>Este es un ejemplo básico de cómo usar Flask con un layout base.</p>
+<h1>Sistema de Facturación</h1>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
+        <li><a href="#">Productos</a></li>
+        <li><a href="#">Facturas</a></li>
+        <li><a href="#">Usuarios</a></li>
+    </ul>
+</nav>
 {% endblock %}
-
-
