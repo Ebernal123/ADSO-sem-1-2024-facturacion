@@ -1,23 +1,21 @@
-<!-- templates/clientes/formulario_cliente.html -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Nuevo Cliente</title>
-</head>
-<body>
-    <h1>Registrar Cliente</h1>
-    <form action="/cliente/nuevo" method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" required><br><br>
+{% extends 'base.html' %}
 
-        <label for="correo">Correo:</label>
-        <input type="email" name="correo" required><br><br>
+{% block contenido %}
+<h2>Nuevo Cliente</h2>
 
-        <label for="telefono">Teléfono:</label>
-        <input type="text" name="telefono"><br><br>
+<form method="POST" action="{{ url_for('cliente_bp.guardar_cliente') }}">
+    <label for="identificacion">Identificación:</label><br>
+    <input type="text" name="identificacion" value="{{ cliente.identificacion if cliente else '' }}" required><br><br>
 
-        <input type="submit" value="Guardar">
-    </form>
-</body>
-</html>
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" name="nombre" value="{{ cliente.nombre if cliente else '' }}" required><br><br>
+
+    <label for="correo">Correo:</label><br>
+    <input type="email" name="correo" value="{{ cliente.correo if cliente else '' }}" required><br><br>
+
+    <label for="telefono">Teléfono:</label><br>
+    <input type="text" name="telefono" value="{{ cliente.telefono if cliente else '' }}"><br><br>
+
+    <input type="submit" value="{{ 'Actualizar' if cliente else 'Guardar' }}">
+</form>
+{% endblock %}
