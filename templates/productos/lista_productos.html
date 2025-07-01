@@ -37,22 +37,31 @@
     <h2>Lista de Productos</h2>
 
     {% if productos %}
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped align-middle">
       <thead class="table-dark">
         <tr>
+          <th>Código</th>
           <th>Nombre</th>
           <th>Descripción</th>
           <th>Precio</th>
-          <th>Especie</th>
+          <th>Stock</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         {% for producto in productos %}
         <tr>
+          <td>{{ producto.codigo }}</td>
           <td>{{ producto.nombre }}</td>
           <td>{{ producto.descripcion }}</td>
           <td>${{ "%.2f"|format(producto.precio|float) }}</td>
-          <td>{{ producto.especie }}</td>
+          <td>{{ producto.stock }}</td>
+          <td>
+            <a href="{{ url_for('producto_bp.editar_producto', codigo=producto.codigo) }}" class="btn btn-sm btn-primary">Editar</a>
+            <form action="{{ url_for('producto_bp.eliminar_producto', codigo=producto.codigo) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de eliminar este producto?');">
+              <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -62,7 +71,7 @@
     {% endif %}
 
     <div class="text-end mt-3">
-      <a href="{{ url_for('nuevo_producto') }}" class="btn btn-success">Agregar Nuevo Producto</a>
+      <a href="{{ url_for('producto_bp.nuevo_producto') }}" class="btn btn-success">Agregar Nuevo Producto</a>
     </div>
   </div>
 </body>

@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>Sistema de Facturación</h1>
-<nav>
-    <ul>
-        <li><a href="{{ url_for('clientes') }}">Clientes</a></li>
-        <li><a href="#">Productos</a></li>
-        <li><a href="#">Facturas</a></li>
-        <li><a href="#">Usuarios</a></li>
-    </ul>
-</nav>
+{% block contenido %}
+    <h1>Sistema de Facturación</h1>
+    <div class="list-group">
+        <a href="{{ url_for('cliente_bp.lista_clientes') }}" class="list-group-item list-group-item-action">Clientes</a>
+        <a href="{{ url_for('producto_bp.lista_productos') }}" class="list-group-item list-group-item-action">Productos</a>
+        <a href="{{ url_for('factura_bp.lista_facturas') }}" class="list-group-item list-group-item-action">Facturas</a>
+        <a href="{{ url_for('usuario_bp.lista_usuarios') }}" class="list-group-item list-group-item-action">Usuarios</a>
+    </div>
 {% endblock %}

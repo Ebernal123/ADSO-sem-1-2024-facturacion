@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models.producto.producto import Producto
+from models.producto import Producto
 from models import db
 
 producto_bp = Blueprint('producto_bp', __name__, url_prefix='/producto')
@@ -66,3 +66,4 @@ def editar_producto(codigo):
         return redirect(url_for('producto_bp.lista_productos'))
 
     return render_template('productos/formulario_producto.html', producto=producto)
+

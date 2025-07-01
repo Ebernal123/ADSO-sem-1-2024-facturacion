@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+    <h2>Bienvenido al Sistema de Facturación</h2>
+    <p>Desde aquí podrás gestionar clientes, productos, facturas y usuarios.</p>
+
+    <ul>
+        <li><a href="{{ url_for('cliente_bp.lista_clientes') }}">Ver Clientes</a></li>
+        <li><a href="{{ url_for('producto_bp.lista_productos') }}">Ver Productos</a></li>
+        <li><a href="{{ url_for('factura_bp.lista_facturas') }}">Ver Facturas</a></li>
+    </ul>
+{% endblock %}
