@@ -1,78 +1,46 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lista de Productos - FACT-3000</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  <style>
-    body {
-      background-color: #f4f6f8;
-    }
-    .container {
-      max-width: 900px;
-      margin-top: 40px;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-  </style>
-</head>
-<body>
-  <nav class="navbar navbar-light bg-light shadow-sm">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">FACT-3000</a>
-    </div>
-  </nav>
+{% extends 'base.html' %}
 
-  <div class="container">
-    <h2>Lista de Productos</h2>
+{% block contenido %}
+<h2>Listado de Productos</h2>
 
-    {% if productos %}
-    <table class="table table-bordered table-striped align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>Código</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Stock</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for producto in productos %}
-        <tr>
-          <td>{{ producto.codigo }}</td>
-          <td>{{ producto.nombre }}</td>
-          <td>{{ producto.descripcion }}</td>
-          <td>${{ "%.2f"|format(producto.precio|float) }}</td>
-          <td>{{ producto.stock }}</td>
-          <td>
-            <a href="{{ url_for('producto_bp.editar_producto', codigo=producto.codigo) }}" class="btn btn-sm btn-primary">Editar</a>
-            <form action="{{ url_for('producto_bp.eliminar_producto', codigo=producto.codigo) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de eliminar este producto?');">
-              <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-      <p class="text-center fs-5">No hay productos registrados.</p>
-    {% endif %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li style="color: {% if category == 'success' %}green{% else %}red{% endif %};">
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
-    <div class="text-end mt-3">
-      <a href="{{ url_for('producto_bp.nuevo_producto') }}" class="btn btn-success">Agregar Nuevo Producto</a>
-    </div>
-  </div>
-</body>
-</html>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Precio</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in productos %}
+    <tr>
+      <td>{{ p.codigo }}</td>
+      <td>{{ p.nombre }}</td>
+      <td>{{ p.descripcion }}</td>
+      <td>{{ '{:,.2f}'.format(p.precio) }}</td>
+      <td>
+        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('producto_bp.editar_producto', codigo=p.codigo) }}">Editar</a>
+        <a class="btn btn-sm btn-outline-danger" href="{{ url_for('producto_bp.eliminar_producto', codigo=p.codigo) }}" onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="btn btn-primary" href="{{ url_for('producto_bp.nuevo_producto') }}">Registrar nuevo producto</a>
+{% endblock %}
+

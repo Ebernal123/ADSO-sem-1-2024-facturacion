@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
-<h2>Nuevo Cliente</h2>
+<h2>{% if cliente %}Editar Cliente{% else %}Nuevo Cliente{% endif %}</h2>
 
-<form method="POST" action="{{ url_for('cliente_bp.guardar_cliente') }}">
+<form method="POST" action="{% if cliente %}{{ url_for('cliente_bp.editar_cliente', identificacion=cliente.identificacion) }}{% else %}{{ url_for('cliente_bp.guardar_cliente') }}{% endif %}">
     <label for="identificacion">Identificación:</label><br>
-    <input type="text" name="identificacion" value="{{ cliente.identificacion if cliente else '' }}" required><br><br>
+    {% if cliente %}
+        <!-- En edición mostramos la identificación pero no permitimos cambiarla -->
+        <input type="text" name="identificacion" value="{{ cliente.identificacion }}" readonly><br><br>
+    {% else %}
+        <input type="text" name="identificacion" value="" required><br><br>
+    {% endif %}
 
     <label for="nombre">Nombre:</label><br>
     <input type="text" name="nombre" value="{{ cliente.nombre if cliente else '' }}" required><br><br>
@@ -19,3 +24,5 @@
     <input type="submit" value="{{ 'Actualizar' if cliente else 'Guardar' }}">
 </form>
 {% endblock %}
+
+

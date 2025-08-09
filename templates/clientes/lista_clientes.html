@@ -1,46 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Clientes</title>
-</head>
-<body>
-    <h2>Clientes Registrados</h2>
+{% extends 'base.html' %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul>
-          {% for category, message in messages %}
-            <li><strong>{{ category.title() }}:</strong> {{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+{% block contenido %}
+<h2>Listado de Clientes</h2>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Identificaci�n</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Tel�fono</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for cliente in clientes %}
-            <tr>
-                <td>{{ cliente.identificacion }}</td>
-                <td>{{ cliente.nombre }}</td>
-                <td>{{ cliente.correo }}</td>
-                <td>{{ cliente.telefono }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Mensajes flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li style="color: {% if category == 'success' %}green{% else %}red{% endif %};">
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
-    <br>
-    <a href="{{ url_for('cliente_bp.nuevo_cliente') }}">Registrar Nuevo Cliente</a>
-</body>
-</html>
+<!-- Tabla de clientes -->
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Identificación</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.identificacion }}</td>
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.correo }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>
+                <a href="{{ url_for('cliente_bp.editar_cliente', identificacion=cliente.identificacion) }}">Editar</a> |
+                <a href="{{ url_for('cliente_bp.eliminar_cliente', identificacion=cliente.identificacion) }}" onclick="return confirm('¿Estás seguro de eliminar este cliente?')">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
+<br>
+<a href="{{ url_for('cliente_bp.nuevo_cliente') }}">Registrar nuevo cliente</a>
+{% endblock %}
 
