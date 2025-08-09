@@ -10,4 +10,5 @@ class Usuario(db.Model):
     rol = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
-        return f"<Usuario(nombre={self.nombre}, rol={self.rol})>"
+        return f"<Usuario {self.nombre} ({self.rol})>"
+

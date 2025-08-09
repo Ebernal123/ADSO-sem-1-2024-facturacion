@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Crear Usuario</title>
-</head>
-<body>
-    <h1>Crear Usuario</h1>
-    <form method="POST">
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" name="nombre" required><br><br>
+{% extends 'base.html' %}
 
-        <label for="correo">Correo:</label><br>
-        <input type="email" name="correo" required><br><br>
+{% block contenido %}
+<h2>Crear Usuario</h2>
 
-        <label for="rol">Rol:</label><br>
-        <input type="text" name="rol" required><br><br>
+<form method="POST" action="{{ url_for('usuarios.crear_usuario') }}">
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input class="form-control" type="text" name="nombre" required>
+    </div>
 
-        <button type="submit">Guardar Usuario</button>
-    </form>
-</body>
-</html>
+    <div class="mb-3">
+        <label class="form-label">Correo</label>
+        <input class="form-control" type="email" name="correo" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Rol</label>
+        <input class="form-control" type="text" name="rol" required>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a href="{{ url_for('usuarios.listar_usuarios') }}" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}
+
