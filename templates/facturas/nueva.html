@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h2>Crear Nueva Factura</h2>
+
+<form method="POST" action="{{ url_for('facturas.crear_factura') }}">
+  <div class="mb-3">
+    <label for="cliente_id" class="form-label">Cliente</label>
+    <select id="cliente_id" name="cliente_id" class="form-select" required>
+      <option value="" disabled selected>Seleccione un cliente</option>
+      {% for cliente in clientes %}
+        <option value="{{ cliente.identificacion }}">{{ cliente.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="fecha" class="form-label">Fecha</label>
+    <input type="date" id="fecha" name="fecha" class="form-control" required>
+  </div>
+
+  <h4>Detalles de la Factura</h4>
+  <div id="detalles">
+    <div class="detalle-item mb-3">
+      <label>Producto</label>
+      <select name="producto_codigo[]" class="form-select" onchange="autocompletarPrecio(this)" required>
+        <option value="" disabled selected>Seleccione un producto</option>
+        {% for producto in productos %}
+          <option value="{{ producto.codigo }}">{{ producto.nombre }}</option>
+        {% endfor %}
+      </select>
+
+      <label>Cantidad</label>
+      <input type="number" name="cantidad[]" class="form-control" min="1" required>
+
+      <label>Precio Unitario</label>
+      <input type="number" step="0.01" name="precio_unitario[]" class="form-control" min="0" required>
+    </div>
+  </div>
+
+  <button type="button" id="agregar-detalle" class="btn btn-secondary mb-3">Agregar otro producto</button>
+  <br>
+
+  <button type="submit" class="btn btn-primary">Guardar Factura</button>
+  <a href="{{ url_for('facturas.listar_facturas') }}" class="btn btn-secondary">Volver</a>
+</form>
+
+<script>
+const productos = {{ productos_json|tojson }};
+
+// Función para autocompletar precio al seleccionar producto
+function autocompletarPrecio(select) {
+    const codigo = select.value;
+    const detalle = select.closest('.detalle-item');
+    const precioInput = detalle.querySelector('input[name="precio_unitario[]"]');
+    if (codigo && productos[codigo]) {
+        precioInput.value = productos[codigo].precio;
+    } else {
+        precioInput.value = '';
+    }
+}
+
+// Inicializar selects existentes al cargar la página
+document.querySelectorAll('select[name="producto_codigo[]"]').forEach(select => {
+    select.setAttribute('onchange', 'autocompletarPrecio(this)');
+});
+
+// Script para agregar más detalles dinámicamente
+document.getElementById('agregar-detalle').addEventListener('click', function() {
+    const detallesDiv = document.getElementById('detalles');
+    const detalleOriginal = detallesDiv.querySelector('.detalle-item');
+    const nuevoDetalle = detalleOriginal.cloneNode(true);
+
+    // Limpia los valores
+    nuevoDetalle.querySelectorAll('select, input').forEach(el => {
+        el.value = '';
+    });
+
+    detallesDiv.appendChild(nuevoDetalle);
+});
+</script>
+
+{% endblock %}
+

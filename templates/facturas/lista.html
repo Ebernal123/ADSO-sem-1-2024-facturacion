@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="container mt-4">
+    <h2 class="mb-3">Listado de Facturas</h2>
+
+    <a href="{{ url_for('facturas.crear_factura') }}" class="btn btn-primary mb-3">Nueva Factura</a>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>CC Cliente</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for factura in facturas %}
+        <tr>
+          <td>{{ factura.id }}</td>
+          <td>{{ factura.cliente.identificacion }}</td>
+          <td>{{ factura.cliente.nombre }}</td>
+          <td>{{ factura.cliente.correo }}</td>
+          <td>{{ factura.cliente.telefono }}</td>
+          <td>{{ factura.fecha.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>${{ '%.2f'|format(factura.total) }}</td>
+          <td>
+            <a href="{{ url_for('facturas.ver_factura', id=factura.id) }}" class="btn btn-info btn-sm">Ver</a>
+
+            <form action="{{ url_for('facturas.eliminar_factura', id=factura.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar esta factura?');">
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8" class="text-center">No hay facturas registradas.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+
