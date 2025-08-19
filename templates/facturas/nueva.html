@@ -4,6 +4,7 @@
 <h2>Crear Nueva Factura</h2>
 
 <form method="POST" action="{{ url_for('facturas.crear_factura') }}">
+  <!-- Selección de Cliente -->
   <div class="mb-3">
     <label for="cliente_id" class="form-label">Cliente</label>
     <select id="cliente_id" name="cliente_id" class="form-select" required>
@@ -14,11 +15,24 @@
     </select>
   </div>
 
+  <!-- Selección de Usuario -->
+  <div class="mb-3">
+    <label for="usuario_id" class="form-label">Usuario que genera la factura</label>
+    <select id="usuario_id" name="usuario_id" class="form-select" required>
+      <option value="" disabled selected>Seleccione un usuario</option>
+      {% for usuario in usuarios %}
+        <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- Fecha -->
   <div class="mb-3">
     <label for="fecha" class="form-label">Fecha</label>
     <input type="date" id="fecha" name="fecha" class="form-control" required>
   </div>
 
+  <!-- Detalles de la Factura -->
   <h4>Detalles de la Factura</h4>
   <div id="detalles">
     <div class="detalle-item mb-3">

@@ -1,6 +1,7 @@
 from datetime import datetime
 from models import db  # Importamos la instancia global de SQLAlchemy
 from sqlalchemy.ext.hybrid import hybrid_property
+from models.usuario import Usuario  # Importamos el modelo Usuario
 
 
 class Factura(db.Model):
@@ -8,10 +9,12 @@ class Factura(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cliente_id = db.Column(db.String(20), db.ForeignKey('clientes.identificacion'), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)  # Nuevo campo usuario
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relaciones
     cliente = db.relationship('Cliente', backref=db.backref('facturas', lazy=True))
+    usuario = db.relationship('Usuario', backref=db.backref('facturas', lazy=True))  # Relación con usuario
     detalles = db.relationship('DetalleFactura', backref='factura', lazy=True, cascade="all, delete-orphan")
 
     @hybrid_property

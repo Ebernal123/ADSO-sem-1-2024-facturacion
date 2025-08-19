@@ -10,13 +10,16 @@
     </div>
   </div>
 
+  <!-- Información del cliente y usuario -->
   <div class="card mb-3 p-3">
     <p><strong>Cliente:</strong> {{ factura.cliente.nombre }} ({{ factura.cliente.identificacion }})</p>
     <p><strong>Correo:</strong> {{ factura.cliente.correo }}</p>
     <p><strong>Teléfono:</strong> {{ factura.cliente.telefono }}</p>
+    <p><strong>Usuario:</strong> {{ factura.usuario.nombre }}</p>
     <p><strong>Fecha:</strong> {{ factura.fecha.strftime('%Y-%m-%d %H:%M') }}</p>
   </div>
 
+  <!-- Detalles de la factura -->
   <div class="card">
     <div class="card-body">
       <table class="table table-bordered">

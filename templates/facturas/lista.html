@@ -16,6 +16,7 @@
           <th>Teléfono</th>
           <th>Fecha</th>
           <th>Total</th>
+          <th>Usuario</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -29,6 +30,7 @@
           <td>{{ factura.cliente.telefono }}</td>
           <td>{{ factura.fecha.strftime('%Y-%m-%d %H:%M') }}</td>
           <td>${{ '%.2f'|format(factura.total) }}</td>
+          <td>{{ factura.usuario.nombre }}</td>
           <td>
             <a href="{{ url_for('facturas.ver_factura', id=factura.id) }}" class="btn btn-info btn-sm">Ver</a>
 
@@ -39,7 +41,7 @@
         </tr>
         {% else %}
         <tr>
-          <td colspan="8" class="text-center">No hay facturas registradas.</td>
+          <td colspan="9" class="text-center">No hay facturas registradas.</td>
         </tr>
         {% endfor %}
       </tbody>

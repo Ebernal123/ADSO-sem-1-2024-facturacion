@@ -1,9 +1,9 @@
-# controllers/factura_controller.py
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.cliente import db, Cliente
 from models.factura import Factura, DetalleFactura
 from models.producto import Producto
+from models.usuario import Usuario  # Nuevo: importar modelo Usuario
 
 factura_bp = Blueprint("facturas", __name__)
 
@@ -18,14 +18,16 @@ def listar_facturas():
 def crear_factura():
     clientes = Cliente.query.order_by(Cliente.identificacion).all()
     productos = Producto.query.order_by(Producto.codigo).all()
+    usuarios = Usuario.query.order_by(Usuario.nombre).all()  # Obtener usuarios
 
     if request.method == "POST":
         cliente_id = request.form.get("cliente_id")
-        if not cliente_id:
-            flash("Seleccione un cliente.", "warning")
+        usuario_id = request.form.get("usuario_id")  # Captura del usuario
+        if not cliente_id or not usuario_id:
+            flash("Seleccione cliente y usuario.", "warning")
             return redirect(url_for("facturas.crear_factura"))
 
-        # si el formulario envía fecha, la tomamos (format YYYY-MM-DD)
+        # Fecha de la factura
         fecha_str = request.form.get("fecha")
         fecha_obj = None
         if fecha_str:
@@ -35,17 +37,17 @@ def crear_factura():
                 fecha_obj = None
 
         # Crear la factura
-        factura = Factura(cliente_id=cliente_id)
+        factura = Factura(cliente_id=cliente_id, usuario_id=usuario_id)
         if fecha_obj:
             factura.fecha = fecha_obj
 
         db.session.add(factura)
-        db.session.flush()  # factura.id estará disponible ahora
+        db.session.flush()  # Para obtener factura.id
 
-        # Leer los campos del formulario
+        # Leer detalles
         codigos = request.form.getlist("producto_codigo[]")
         cantidades = request.form.getlist("cantidad[]")
-        precios = request.form.getlist("precio_unitario[]")  # Tomamos precio del formulario
+        precios = request.form.getlist("precio_unitario[]")
 
         filas_validas = 0
         for codigo, cant, precio in zip(codigos, cantidades, precios):
@@ -55,7 +57,6 @@ def crear_factura():
             if not codigo or not cant or not precio:
                 continue
 
-            # Buscar producto por código
             producto = Producto.query.filter_by(codigo=codigo).first()
             if not producto:
                 continue
@@ -92,6 +93,7 @@ def crear_factura():
         "facturas/nueva.html",
         clientes=clientes,
         productos=productos,
+        usuarios=usuarios,
         productos_json=productos_json
     )
 
@@ -103,7 +105,7 @@ def eliminar_factura(id):
         db.session.delete(factura)
         db.session.commit()
         flash("Factura eliminada correctamente.", "success")
-    except Exception as e:
+    except Exception:
         db.session.rollback()
         flash("Error al eliminar la factura.", "danger")
     return redirect(url_for("facturas.listar_facturas"))
